@@ -1,13 +1,17 @@
-# FFI import! void pinMode i32 i32
-PinMode ← |2.0 # External!
+# FFI import! u32 uiua_malloc u32
+Malloc ← |1 # External!
+# FFI import! void uiua_free u32
+Free ← |1.0 # External!
+# FFI import! void write_u32_ptr u32 u32
+WriteUIntPtr ← |2.0 # External!
+# FFI import! void print_utf32 u32 u32
+PrintExtern ← |2.0 # External!
 
-# FFI import! void digitalWrite i32 i32
-DigitalWrite ← |2.0 # External!
-
-# FFI import! void delay u32
-Delay ← |1.0 # External!
-
-Blink ← Delay 1000 DigitalWrite 13 1 Delay 1000 DigitalWrite 13 0
+Print ← (
+  Malloc ∩×₄⟜⇡⊸⧻
+  ⟜(⊃≡WriteUIntPtr⧻+)
+  Free⟜PrintExtern
+)
 
 # FFI export! void uiua_main
-UiuaMain ← ≡(Blink◌)⇡ 10 PinMode 13 1
+UiuaMain ← Print "Hello, world! 🗿"
