@@ -43,8 +43,15 @@ extern "C" {
   size_t serial_write_buffer(uint8_t selector, char *buffer, size_t len) {
     return serials[selector]->write(buffer, len);
   }
+  size_t serial_print_int(uint8_t selector, int32_t value){
+    return serials[selector]->print(value);
+  }
 
   int serial_read(uint8_t selector) {
     return serials[selector]->read();
   }
+  int32_t serial_read_int(uint8_t selector) {
+    return serials[selector]->parseInt();
+  }
+  
 }
