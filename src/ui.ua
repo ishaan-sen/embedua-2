@@ -32,7 +32,11 @@ Delay ← |1.0 # External!
   # AmountWritten ? Port DataPtr
   WriteStr ← |2 # External!
 
-  # FFI import! u8 serial_read u8
+  # FFI import! u32 serial_write u8 u8
+  # AmountWritten ? Port Byte
+  Write ← |2 # External!
+
+  # FFI import! i32 serial_read u8
   # IncomingByte ? Port
   Read ← |1 # External!
 
@@ -54,12 +58,6 @@ SerialPrint ← (
   ◌
 )
 
-# FFI export! void setup
-Setup ← SerialPrint "Hello, world!" ⍢(Delay 100|Serial!(¬ Exists S₀)) Serial!(Begin S₀) 115200
-
-# FFI export! void loop
-Loop ← Delay 100
-
 ┌─╴Servo
   # FFI import! u32 make_servo i32
   # ServoPtr ? Pin
@@ -69,5 +67,32 @@ Loop ← Delay 100
   # ? ServoPtr Microseconds
   WriteMicroseconds ← |2.0 # External!
 └─╴
-# FFI export! void uiua_main
-UiuaMain ← Servo~WriteMicroseconds Servo~Make 10 1500
+
+# # FFI export! void uiua_main
+# UiuaMain ← Servo~WriteMicroseconds Servo~Make 10 1500
+
+# FFI export! void setup
+Setup ← (
+  Serial!(Begin S₀) 115200
+  Serial!(Begin S₁) 115200
+  ⍢(Delay 100|Serial!(¬ Exists S₀))
+  SerialPrint "asdfg"
+  Serial~Write Serial~S₀48
+  ⍢(Serial!(⍢(
+        ◌Write S₀ Read S₁
+      | ¬= 0 Available S₁))
+  | 1)
+)
+# # FFI export! void setup
+# Setup ← (
+#   Serial!(Begin S₁) 115200
+#   ⍢(Delay 100|Serial!(¬ Exists S₁))
+#   Servo~Make 10
+#   Serial!(⍢(
+#       (+₁₅₀₀×₂₀₀-₄₈Read S₁)
+#       ⊸˜Servo~WriteMicroseconds
+#     | ¬=˙-65536 Available S₀))
+# )
+
+# FFI export! void loop
+Loop ← Delay 100

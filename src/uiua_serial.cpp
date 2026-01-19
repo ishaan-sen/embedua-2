@@ -1,4 +1,4 @@
-#import <Arduino.h>
+#include <Arduino.h>
 
 Stream *serials[] = {&Serial, (Stream *)&Serial1};
 
@@ -27,6 +27,7 @@ extern "C" {
     default:
       break;
     }
+    return 0;
   }
 
   uint32_t serial_available(uint8_t selector){
@@ -43,7 +44,7 @@ extern "C" {
     return serials[selector]->write(buffer, len);
   }
 
-  char serial_read(uint8_t selector) {
+  int serial_read(uint8_t selector) {
     return serials[selector]->read();
   }
 }
