@@ -34,6 +34,30 @@ ReadInt ← |1 # External!
 # BytesAvailable ? Port
 Available ← |1 # External!
 
+# FFI import! u32 uiua_malloc u32
+# Ptr ? Size
+Malloc ↚ |1 # External!
+# FFI import! void uiua_free u32
+# ? Ptr
+Free ↚ |1.0 # External!
+# FFI import! void write_u32_ptr u32 u32
+# ? Ptr Value
+WriteUIntPtr ↚ |2.0 # External!
+# FFI import! u32 utf32_to_utf8 u32 u32
+# NewPtr ? DataPtr Len
+ToUTF₈ ↚ |2 # External!
+
+# ? String Port
+PrintStr ← (
+  Malloc ∩×₄⟜⇡⊸⧻
+  ⟜(⊃≡WriteUIntPtr⧻+)
+  Free⟜ToUTF₈
+  Free⟜˜WriteStr
+  ◌
+)
+
 # Ports
 S₀ ← 0
 S₁ ← 1
+
+BaudRate ← 115200
