@@ -3,13 +3,13 @@
 
 extern "C"
 {
-    void *make_servo(int pin)
+    void *native_make_servo(int pin)
     {
         Servo *servo = new Servo;
         servo->attach(pin);
         return servo;
     }
-    void write_us(Servo *servo, int value)
+    void native_write_us(Servo *servo, int value)
     {
         servo->writeMicroseconds(value);
     }

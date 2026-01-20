@@ -1,5 +1,5 @@
 Serial ~ "serial.ua"
-Servo ~ "servo.ua"
+NativeServo ~ "native_servo.ua"
 
 LeftServoPin  ← 10
 RightServoPin ← 11
@@ -19,13 +19,13 @@ OpenSerialPorts ← Serial!(∩⌟Begin S₀ S₁ BaudRate)
 WaitForSerial ← ◌⍢(Delay 100 ∘|¬⊸Serial~Exists)
 
 # LeftServoPtr RightServoPtr ?
-CreateServos ← ∩Servo~Make LeftServoPin RightServoPin
+CreateServos ← ∩NativeServo~Make LeftServoPin RightServoPin
 
 # ? Byte ServoPtr
 SetServo ← (
   +988×4
   ◌⊸Serial!(PrintInt S₀)
-  ˜Servo~WriteMicroseconds
+  ˜NativeServo~WriteMicroseconds
   Serial!(PrintStr "\n" S₀)
 )
 

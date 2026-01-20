@@ -7,3 +7,4 @@ build/*
 *.uasm
 .cache
 compile_commands.json
+uiua-modules/
