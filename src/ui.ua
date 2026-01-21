@@ -31,7 +31,7 @@ SetServo ← (
 
 # LeftServoPtr RightServoPtr ? LeftServoPtr RightServoPtr
 ProcessPacket ← (
-  ∩⌟₀Serial!(Read S₁) # ? Byte₂ Byte₁
+  ∩⌟₀Serial!(Read S₁) # Byte₂ Byte₁ ?
   Serial!(PrintStr "Received packet\n" S₀)
   # TODO: Subscripted by
   ⊃˜∩SetServo⋅⋅⊙∘
