@@ -8,7 +8,7 @@ extern "C"
   {
     char *utf8_string = (char *)malloc(utf32_length * sizeof(uint32_t) + sizeof(char));
     size_t utf8_len = 0;
-    for (int i = 0; i < utf32_length; i++)
+    for (size_t i = 0; i < utf32_length; i++)
     {
       if (utf32_string[i] < 0x00000080)
       {
