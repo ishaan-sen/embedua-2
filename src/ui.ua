@@ -64,3 +64,6 @@ Setup ← (
   ⍢Loop 1
   ⋅◌
 )
+
+# FFI export! void loop
+DelayLoop ← Delay 100
