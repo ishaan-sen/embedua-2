@@ -38,8 +38,9 @@ CreateMotors ← (
 SetMotor ← (
   -127                   # SpeedVal ? Byte
   ◌⊸Serial!(PrintInt S₀) # SpeedVal ? SpeedVal
+  Serial!(PrintStr "\n" S₀)
   MotorDriver!⊃↓(
-    ˜SetDCSpeed⌵
+    ˜SetDCSpeed⌵mul2
   | ˜RunDCMotor+1<0)
 )
 
