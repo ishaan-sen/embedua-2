@@ -33,7 +33,7 @@ WaitForSerial ← ◌⍢(Delay 100 ∘|¬⊸Serial~Exists)
 
 # BaseServoPtr TipServoPtr ?
 CreateServos ← (
-  ∩⌞Servo~Make BaseServoPin TipServoPin
+  ∩Servo~Make BaseServoPin TipServoPin
 )
 
 # LeftDCMotorPtrs RightDCMotorPtrs ?
