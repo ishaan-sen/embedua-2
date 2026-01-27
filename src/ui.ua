@@ -1,6 +1,7 @@
 # Experimental!
 
 Serial ~ "serial.ua"
+Servo ~ "native_servo.ua"
 MotorDriver ~ "motor_driver.ua"
 
 # I2C address, 0x60
@@ -11,6 +12,9 @@ ISCAddress ← 96
 LeftMotorPorts ← [1 2]
 # Front, back
 RightMotorPorts ← [3 4]
+
+BaseServoPin ← 9
+TipServoPin  ← 10
 
 # Byte that separates packets in the serial stream
 PacketSep ← 255
@@ -27,6 +31,11 @@ OpenSerialPorts ← Serial!(∩⌟Begin S₀ S₁ BaudRate)
 # ? Port
 WaitForSerial ← ◌⍢(Delay 100 ∘|¬⊸Serial~Exists)
 
+# BaseServoPtr TipServoPtr ?
+CreateServos ← (
+  ∩⌞Servo~Make BaseServoPin TipServoPin
+)
+
 # LeftDCMotorPtrs RightDCMotorPtrs ?
 CreateMotors ← (
   MotorDriver~GetMotorDriver ISCAddress # DriverPtr ?
@@ -40,7 +49,7 @@ SetMotor ← (
   ◌⊸Serial!(PrintInt S₀) # SpeedVal ? SpeedVal
   Serial!(PrintStr "\n" S₀)
   MotorDriver!⊃↓(
-    ˜SetDCSpeed⌵mul2
+    ˜SetDCSpeed⌵×2
   | ˜RunDCMotor+1<0)
 )
 
@@ -48,10 +57,15 @@ ProcessPacket ← (
   ∩⌟₀Serial!(Read S₁) # Byte₂ Byte₁ ?
   Serial!(PrintStr "Received packet\n" S₀)
   ⊸₂˜∩≡SetMotor # ? Byte₂ Byte₁ LeftMotorPtr RightMotorPtr
+  ⊙⊙(
+    ∩⌟₀Serial!(Read S₁) # Byte₄ Byte₃ ?
+    ∩(+992×4)
+    ⊸₂˜∩˜Servo~WriteMicroseconds
+  )
 )
 
 Loop ← (
-  >2 Serial!(Available S₁)
+  >4 Serial!(Available S₁)
   ◌⍢⊙(
     =PacketSep Serial!(Read S₁)
     ◌⍢⊙ProcessPacket⊙0
@@ -61,9 +75,10 @@ Loop ← (
 # FFI export! void setup
 Setup ← (
   OpenSerialPorts
+  CreateServos
   CreateMotors
   ⍢Loop 1
-  ⋅◌
+  ⋅⋅⋅◌
 )
 
 # FFI export! void loop
