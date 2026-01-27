@@ -53,14 +53,19 @@ SetMotor ← (
   | ˜RunDCMotor+1<0)
 )
 
+# ? Byte ServoPtr
+SetServo ← (
+  +992×4
+  ˜Servo~WriteMicroseconds
+)
+
 ProcessPacket ← (
-  ∩⌟₀Serial!(Read S₁) # Byte₂ Byte₁ ?
+  ∩Serial!(Read S₁) # Byte₂ Byte₁ ?
   Serial!(PrintStr "Received packet\n" S₀)
   ⊸₂˜∩≡SetMotor # ? Byte₂ Byte₁ LeftMotorPtr RightMotorPtr
   ⊙⊙(
-    ∩⌟₀Serial!(Read S₁) # Byte₄ Byte₃ ?
-    ∩(+992×4)
-    ⊸₂˜∩˜Servo~WriteMicroseconds
+    ∩Serial!(Read S₁) # Byte₄ Byte₃ ?
+    ⊸₂˜∩SetServo
   )
 )
 
@@ -76,6 +81,7 @@ Loop ← (
 Setup ← (
   OpenSerialPorts
   CreateServos
+  ⊸₂∩(SetServo 254)
   CreateMotors
   ⍢Loop 1
   ⋅⋅⋅◌
