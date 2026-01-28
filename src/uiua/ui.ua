@@ -1,8 +1,8 @@
 # Experimental!
 
-Serial ~ "serial.ua"
-Servo ~ "native_servo.ua"
-MotorDriver ~ "motor_driver.ua"
+Serial ~ "../bindings/uiua/serial.ua"
+Servo ~ "../bindings/uiua/native_servo.ua"
+MotorDriver ~ "../bindings/uiua/motor_driver.ua"
 
 # I2C address, 0x60
 ISCAddress ← 96
